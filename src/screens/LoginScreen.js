@@ -12,8 +12,14 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import IconChat from '../assets/icon-chat.png';
 
-const LoginScreen = () => {
+const LoginScreen = ({navigation}) => {
   const [data, setData] = useState({name: ''});
+
+  const onSubmit = () => {
+    if (data.name !== '') {
+      return navigation.navigate('ChatScreen', {data: data.name});
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -39,7 +45,7 @@ const LoginScreen = () => {
       </View>
 
       <View style={styles.wrapperButton}>
-        <TouchableOpacity onPress={() => {}} style={styles.btnContinue}>
+        <TouchableOpacity onPress={() => onSubmit()} style={styles.btnSubmit}>
           <Ionicons name="arrow-forward" color="#ffffff" size={28} />
         </TouchableOpacity>
       </View>
@@ -90,7 +96,7 @@ const styles = EStyleSheet.create({
     alignItems: 'flex-end',
     marginTop: '35rem',
   },
-  btnContinue: {
+  btnSubmit: {
     height: '40rem',
     width: '40rem',
     borderRadius: '40rem',
