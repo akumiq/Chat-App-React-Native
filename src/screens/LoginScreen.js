@@ -1,6 +1,14 @@
 import React, {useState} from 'react';
-import {View, Text, StatusBar, Image, TextInput} from 'react-native';
+import {
+  View,
+  Text,
+  StatusBar,
+  Image,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import IconChat from '../assets/icon-chat.png';
 
@@ -28,6 +36,12 @@ const LoginScreen = () => {
           onChangeText={(value) => setData({...data, name: value})}
           style={styles.textInput}
         />
+      </View>
+
+      <View style={styles.wrapperButton}>
+        <TouchableOpacity onPress={() => {}} style={styles.btnContinue}>
+          <Ionicons name="arrow-forward" color="#ffffff" size={28} />
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -71,5 +85,18 @@ const styles = EStyleSheet.create({
     marginTop: '12rem',
     paddingVertical: '6rem',
     paddingHorizontal: '15rem',
+  },
+  wrapperButton: {
+    alignItems: 'flex-end',
+    marginTop: '35rem',
+  },
+  btnContinue: {
+    height: '40rem',
+    width: '40rem',
+    borderRadius: '40rem',
+    backgroundColor: '#9075E3',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: '20rem',
   },
 });
