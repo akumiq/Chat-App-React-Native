@@ -13,11 +13,12 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import IconChat from '../assets/icon-chat.png';
 
 const LoginScreen = ({navigation}) => {
-  const [data, setData] = useState({name: ''});
+  // const [data, setData] = useState({name: ''});
+  const [name, setName] = useState('');
 
   const onSubmit = () => {
-    if (data.name !== '') {
-      return navigation.navigate('ChatScreen', {data: data.name});
+    if (name !== '') {
+      return navigation.navigate('ChatScreen', name);
     }
   };
 
@@ -38,8 +39,8 @@ const LoginScreen = ({navigation}) => {
 
         <TextInput
           placeholder="Username"
-          value={data.name}
-          onChangeText={(value) => setData({...data, name: value})}
+          value={name}
+          onChangeText={(value) => setName(value)}
           style={styles.textInput}
         />
       </View>
