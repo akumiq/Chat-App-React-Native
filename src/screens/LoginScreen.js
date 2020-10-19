@@ -8,16 +8,23 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import AsyncStorage from '@react-native-community/async-storage';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import IconChat from '../assets/icon-chat.png';
 
 const LoginScreen = ({navigation}) => {
   const [name, setName] = useState('');
+  const [user, setUser] = useState(null);
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (name !== '') {
-      return navigation.navigate('ChatScreen', name);
+      const _id = Math.random().toString(36).substring(7);
+      const users = {_id, name};
+      await AsyncStorage.setItem('user', JSON.stringify(users));
+      setUser(users);
+
+      return navigation.navigate('ChatScreen', user);
     }
   };
 
