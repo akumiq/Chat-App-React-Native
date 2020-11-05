@@ -1,13 +1,20 @@
 import React, {useEffect} from 'react';
 import {View, StatusBar, Image} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import * as firebase from 'firebase';
 
 import imgLogo from '../assets/mq.png';
 
 const SpalshScreen = ({navigation}) => {
   useEffect(() => {
     setTimeout(() => {
-      navigation.navigate('LoginScreen');
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user === null) {
+          navigation.navigate('LoginScreen');
+        } else {
+          navigation.navigate('ChatScreen');
+        }
+      });
     }, 2000);
   }, [navigation]);
 
