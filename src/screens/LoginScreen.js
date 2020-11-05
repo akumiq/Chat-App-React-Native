@@ -8,10 +8,13 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import AsyncStorage from '@react-native-community/async-storage';
+import {showMessage} from 'react-native-flash-message';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import IconChat from '../assets/icon-chat.png';
+
+import Fire from '../auth/Fire';
+import {storeData} from '../auth/LocalStorage';
 
 const LoginScreen = ({navigation}) => {
   const [name, setName] = useState('');
@@ -19,12 +22,36 @@ const LoginScreen = ({navigation}) => {
 
   const onSubmit = async () => {
     if (name !== '') {
-      const _id = Math.random().toString(36).substring(7);
-      const users = {_id, name};
-      await AsyncStorage.setItem('user', JSON.stringify(users));
-      setUser(users);
+      Fire.auth()
+        .signInAnonymously()
+        .then((res) => {
+          Fire.database()
+            .ref(`users/${res.user.uid}/`)
+            .once('value')
+            .then((resDB) => {
+              const _id = Math.random().toString(36).substring(7);
+              const users = {_id, name};
+              storeData('user', users);
 
-      return navigation.navigate('ChatScreen', user);
+              if (resDB.val()) {
+                navigation.navigate('ChatScreen', user);
+                setUser(users);
+              }
+            });
+        })
+        .catch((err) => {
+          showMessage({
+            message: err.message,
+            type: 'default',
+            position: 'top',
+            backgroundColor: '#c0392b',
+            color: '#FFFFFF',
+            style: {
+              marginTop: 20,
+              alignItems: 'center',
+            },
+          });
+        });
     }
   };
 

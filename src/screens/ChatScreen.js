@@ -1,25 +1,11 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import {LogBox, SafeAreaView} from 'react-native';
+import {LogBox, SafeAreaView, StatusBar} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import {GiftedChat} from 'react-native-gifted-chat';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
-import AsyncStorage from '@react-native-community/async-storage';
-import {GiftedChat} from 'react-native-gifted-chat';
 
-const firebaseConfig = {
-  apiKey: 'AIzaSyDWcfQID0ZRdiHhthXeLGSwDHpdgAuNUyc',
-  authDomain: 'chat-app-e6405.firebaseapp.com',
-  databaseURL: 'https://chat-app-e6405.firebaseio.com',
-  projectId: 'chat-app-e6405',
-  storageBucket: 'chat-app-e6405.appspot.com',
-  messagingSenderId: '347009828405',
-  appId: '1:347009828405:web:2fcda68202c9ec69b7d37c',
-  measurementId: 'G-381EC7QMF5',
-};
-
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
+import {getData} from '../auth/LocalStorage';
 
 const db = firebase.firestore();
 const chatRef = db.collection('chats');
@@ -32,6 +18,7 @@ const ChatScreen = () => {
 
   useEffect(() => {
     readUser();
+
     const unSubscribe = chatRef.onSnapshot((querySnapshot) => {
       const messageFirestore = querySnapshot
         .docChanges()
@@ -49,7 +36,7 @@ const ChatScreen = () => {
   }, [appendMessage]);
 
   const readUser = async () => {
-    const users = await AsyncStorage.getItem('user');
+    const users = await getData('user');
     if (users) {
       setUser(JSON.parse(users));
     }
@@ -66,6 +53,12 @@ const ChatScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar
+        translucent
+        backgroundColor="#ffffff"
+        barStyle="dark-content"
+      />
+
       <GiftedChat
         key={(index) => index.toString()}
         onSend={onHandleSend}
